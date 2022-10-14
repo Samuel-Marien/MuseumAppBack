@@ -1,6 +1,7 @@
 import cors from 'cors'
 import express from 'express'
 const app = express()
+import morgan from 'morgan'
 
 import dotenv from 'dotenv'
 dotenv.config()
@@ -15,6 +16,10 @@ import authRouter from './routes/authRoutes.js'
 // middlewares
 import notFoundMiddleware from './middleware/not-found.js'
 import errorHandlerMiddleware from './middleware/error-handler.js'
+
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan('dev'))
+}
 
 app.use(cors())
 app.use(express.json())
