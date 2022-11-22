@@ -8,6 +8,9 @@ const ExibitionArtSchema = new mongoose.Schema(
     exibitionId: {
       type: Number
     },
+    imageId: {
+      type: Number
+    },
     imageCaption: {
       type: String
     },
@@ -20,10 +23,13 @@ const ExibitionArtSchema = new mongoose.Schema(
     imageLargestUrl: {
       type: String
     },
-    imageStandardUrl: {
+    imageStandardtUrl: {
       type: String
     },
     imageThumbnailUrl: {
+      type: String
+    },
+    imageDate: {
       type: String
     },
     createdBy: {
