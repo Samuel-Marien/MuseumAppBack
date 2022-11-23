@@ -10,4 +10,11 @@ const saveExhibitionArt = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ art })
 }
 
-export { saveExhibitionArt }
+const getAllUserArts = async (req, res) => {
+  const arts = await ExhibitionArt.find({ createdBy: req.user.userId })
+  res
+    .status(StatusCodes.OK)
+    .json({ arts, totalArts: arts.length, numOfPages: 1 })
+}
+
+export { saveExhibitionArt, getAllUserArts }

@@ -1,8 +1,12 @@
 import express from 'express'
 const router = express.Router()
 
-import { saveExhibitionArt } from '../controllers/ExhibitionArtController.js'
+import {
+  saveExhibitionArt,
+  getAllUserArts
+} from '../controllers/ExhibitionArtController.js'
 
 router.route('/addUserArts').post(saveExhibitionArt)
+router.route('/getAllUserArts').get(getAllUserArts)
 
 export default router
