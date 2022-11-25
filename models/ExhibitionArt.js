@@ -32,6 +32,9 @@ const ExibitionArtSchema = new mongoose.Schema(
     imageDate: {
       type: String
     },
+    isFavorite: {
+      type: Boolean
+    },
     createdBy: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
