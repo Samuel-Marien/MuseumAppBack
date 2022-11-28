@@ -33,4 +33,31 @@ const deleteExhibitionArt = async (req, res) => {
   res.status(StatusCodes.OK).json({ msg: 'Art removed successfully!' })
 }
 
-export { saveExhibitionArt, getAllUserArts, deleteExhibitionArt }
+const addExhibitionArtToFavorite = async (req, res) => {
+  const { id: artId } = req.params
+  const art = await ExhibitionArt.findOne({ _id: artId })
+
+  if (!art) {
+    throw new NotFounderror(`No art found with thisid: ${artId}`)
+  }
+
+  checkPermissions(req.user, art.createdBy)
+
+  const favoriteArt = await ExhibitionArt.findOneAndUpdate(
+    { _id: artId },
+    req.body,
+    {
+      new: true,
+      runValidators: true
+    }
+  )
+
+  res.status(StatusCodes.OK).json({ favoriteArt })
+}
+
+export {
+  saveExhibitionArt,
+  getAllUserArts,
+  deleteExhibitionArt,
+  addExhibitionArtToFavorite
+}
