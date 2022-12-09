@@ -25,6 +25,9 @@ const CollectionArtSchema = new mongoose.Schema(
     period: { type: String },
     dynasty: { type: String },
     images: { type: Array },
+    isFavorite: {
+      type: Boolean
+    },
 
     createdBy: {
       type: mongoose.Types.ObjectId,
