@@ -12,7 +12,8 @@ import connectDB from './db/connect.js'
 
 // router
 import authRouter from './routes/authRoutes.js'
-import artRouter from './routes/artRoutes.js'
+import exhibArtRoutes from './routes/exhibArtRoutes.js'
+import collecArtRoutes from './routes/collecArtRoutes.js'
 
 // middlewares
 import notFoundMiddleware from './middleware/not-found.js'
@@ -35,7 +36,8 @@ app.get('/api/v1', (req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
-app.use('/api/v1/arts', authenticatedUser, artRouter)
+app.use('/api/v1/arts', authenticatedUser, exhibArtRoutes)
+app.use('/api/v1/arts', authenticatedUser, collecArtRoutes)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)

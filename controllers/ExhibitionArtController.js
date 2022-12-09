@@ -6,13 +6,13 @@ import checkPermissions from '../utils/checkPermissions.js'
 const saveExhibitionArt = async (req, res) => {
   req.body.createdBy = req.user.userId
 
-  console.log(req.body)
+  // console.log(req.body)
 
   const art = await ExhibitionArt.create(req.body)
   res.status(StatusCodes.CREATED).json({ art })
 }
 
-const getAllUserArts = async (req, res) => {
+const getAllExhibitionUserArts = async (req, res) => {
   const arts = await ExhibitionArt.find({ createdBy: req.user.userId })
   res
     .status(StatusCodes.OK)
@@ -57,7 +57,7 @@ const addExhibitionArtToFavorite = async (req, res) => {
 
 export {
   saveExhibitionArt,
-  getAllUserArts,
+  getAllExhibitionUserArts,
   deleteExhibitionArt,
   addExhibitionArtToFavorite
 }

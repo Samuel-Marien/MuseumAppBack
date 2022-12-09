@@ -3,13 +3,13 @@ const router = express.Router()
 
 import {
   saveExhibitionArt,
-  getAllUserArts,
+  getAllExhibitionUserArts,
   deleteExhibitionArt,
   addExhibitionArtToFavorite
 } from '../controllers/ExhibitionArtController.js'
 
 router.route('/addUserArts').post(saveExhibitionArt)
-router.route('/getAllUserArts').get(getAllUserArts)
+router.route('/getAllUserArts').get(getAllExhibitionUserArts)
 router
   .route('/:id')
   .delete(deleteExhibitionArt)
