@@ -12,4 +12,13 @@ const saveCollectionArt = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ art })
 }
 
-export { saveCollectionArt }
+const getAllCollectionUserArts = async (req, res) => {
+  const artsCollec = await CollectionArt.find({ createdBy: req.user.userId })
+  res.status(StatusCodes.OK).json({
+    artsCollec,
+    totalCollecArts: artsCollec.length,
+    numOfCollecPages: 1
+  })
+}
+
+export { saveCollectionArt, getAllCollectionUserArts }
