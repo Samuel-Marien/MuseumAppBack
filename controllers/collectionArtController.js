@@ -21,4 +21,45 @@ const getAllCollectionUserArts = async (req, res) => {
   })
 }
 
-export { saveCollectionArt, getAllCollectionUserArts }
+const deleteCollectionUserArt = async (req, res) => {
+  const { id: artId } = req.params
+  const art = await CollectionArt.findOne({ _id: artId })
+
+  if (!art) {
+    throw new NotFounderror(`No artwork found with this id: ${artId}`)
+  }
+
+  checkPermissions(req.user, art.createdBy)
+
+  await art.remove()
+  res.status(StatusCodes.OK).json({ msg: 'Art deleted successfully' })
+}
+
+const addCollectionArtToFavorite = async (req, res) => {
+  const { id: artId } = req.params
+  const art = await CollectionArt.findOne({ id: artId })
+
+  if (!art) {
+    throw new NotFounderror(`No art found with thisid: ${artId}`)
+  }
+
+  checkPermissions(req.user, art.createdBy)
+
+  const favoriteArt = await CollectionArt.findOneAndUpdate(
+    { _id: artId },
+    req.body,
+    {
+      new: true,
+      runValidators: true
+    }
+  )
+
+  res.status(StatusCodes.OK).json({ favoriteArt })
+}
+
+export {
+  saveCollectionArt,
+  getAllCollectionUserArts,
+  deleteCollectionUserArt,
+  addCollectionArtToFavorite
+}

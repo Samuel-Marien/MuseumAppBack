@@ -37,7 +37,7 @@ app.get('/api/v1', (req, res) => {
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/arts', authenticatedUser, exhibArtRoutes)
-app.use('/api/v1/arts', authenticatedUser, collecArtRoutes)
+app.use('/api/v1/collec-arts', authenticatedUser, collecArtRoutes)
 
 app.use(notFoundMiddleware)
 app.use(errorHandlerMiddleware)
