@@ -13,7 +13,47 @@ const saveExhibitionArt = async (req, res) => {
 }
 
 const getAllExhibitionUserArts = async (req, res) => {
-  const arts = await ExhibitionArt.find({ createdBy: req.user.userId })
+  const { isFavorite, sort, search } = req.query
+
+  const queryObject = {
+    createdBy: req.user.userId
+  }
+
+  // sort by favorite
+  if (isFavorite) {
+    queryObject.isFavorite = isFavorite
+  }
+
+  // user search by type exhib title
+  if (search) {
+    queryObject.exibitionTitle = { $regex: search, $options: 'i' }
+  }
+
+  let result = ExhibitionArt.find(queryObject)
+
+  //sort by date
+  if (sort === 'latest') {
+    result = result.sort('-imageDate')
+  }
+  if (sort === 'oldest') {
+    result = result.sort('imageDate')
+  }
+  //sort by saved date
+  if (sort === 'latestSaved') {
+    result = result.sort('-createdAt')
+  }
+  if (sort === 'oldestSaved') {
+    result = result.sort('createdAt')
+  }
+  // sort by exhib Title
+  if (sort === 'a-z') {
+    result = result.sort('exibitionTitle')
+  }
+  if (sort === 'z-a') {
+    result = result.sort('-exibitionTitle')
+  }
+
+  const arts = await result
   res
     .status(StatusCodes.OK)
     .json({ arts, totalArts: arts.length, numOfPages: 1 })
