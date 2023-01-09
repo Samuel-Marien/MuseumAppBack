@@ -44,10 +44,10 @@ const getAllExhibitionUserArts = async (req, res) => {
     result = result.sort('imageDate')
   }
   //sort by saved date
-  if (sort === 'latestSaved') {
+  if (sort === 'latest saved') {
     result = result.sort('-createdAt')
   }
-  if (sort === 'oldestSaved') {
+  if (sort === 'oldest saved') {
     result = result.sort('createdAt')
   }
   // sort by exhib Title
