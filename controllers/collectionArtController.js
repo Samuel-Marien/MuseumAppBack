@@ -13,11 +13,109 @@ const saveCollectionArt = async (req, res) => {
 }
 
 const getAllCollectionUserArts = async (req, res) => {
-  const artsCollec = await CollectionArt.find({ createdBy: req.user.userId })
+  const { isFavorite, sort, search, category } = req.query
+
+  const queryObject = {
+    createdBy: req.user.userId
+  }
+
+  // sort by favorite
+  if (isFavorite) {
+    queryObject.isFavorite = isFavorite
+  }
+
+  // user search by type collection title
+  if (search) {
+    queryObject.artTitle = { $regex: search, $options: 'i' }
+  }
+  // sort by category
+  switch (category) {
+    case 'Arts of Africa':
+      queryObject.collectionTitle = 'Arts of Africa'
+      break
+    case 'Photography':
+      queryObject.collectionTitle = 'Photography'
+      break
+    case 'European Art':
+      queryObject.collectionTitle = 'European Art'
+      break
+    case 'Elizabeth A. Sackler Center for Feminist Art':
+      queryObject.collectionTitle =
+        'Elizabeth A. Sackler Center for Feminist Art'
+      break
+    case 'Egyptian, Classical, Ancient Near Eastern Art':
+      queryObject.collectionTitle =
+        'Egyptian, Classical, Ancient Near Eastern Art'
+      break
+    case 'Decorative Arts':
+      queryObject.collectionTitle = 'Decorative Arts'
+      break
+    case 'American Art':
+      queryObject.collectionTitle = 'American Art'
+      break
+    case 'Arts of the Islamic World':
+      queryObject.collectionTitle = 'Arts of the Islamic World'
+      break
+    case 'Arts of the Americas':
+      queryObject.collectionTitle = 'Arts of the Americas'
+      break
+    case 'Arts of the Pacific Islands':
+      queryObject.collectionTitle = 'Arts of the Pacific Islands'
+      break
+    case 'Asian Art':
+      queryObject.collectionTitle = 'Asian Art'
+      break
+    case 'Contemporary Art':
+      queryObject.collectionTitle = 'Contemporary Art'
+      break
+
+    default:
+      break
+  }
+
+  let result = CollectionArt.find(queryObject)
+
+  //knowing number of favorite
+  let resultFavoriteQuery = CollectionArt.find({ isFavorite: true })
+  const resultFavorite = await resultFavoriteQuery
+  const numOfCollecFavorite = resultFavorite.length
+
+  //sort by date
+  if (sort === 'latest') {
+    result = result.sort('-date')
+  }
+  if (sort === 'oldest') {
+    result = result.sort('date')
+  }
+  //sort by saved date
+  if (sort === 'latest saved') {
+    result = result.sort('-createdAt')
+  }
+  if (sort === 'oldest saved') {
+    result = result.sort('createdAt')
+  }
+  // sort by collec Title
+  if (sort === 'a-z') {
+    result = result.sort('artTitle')
+  }
+  if (sort === 'z-a') {
+    result = result.sort('-artTitle')
+  }
+
+  const page = Number(req.query.page) || 1
+  const limit = Number(req.query.limit) || 12
+  const skip = (page - 1) * limit
+  result = result.skip(skip).limit(limit)
+
+  const artsCollec = await result
+
+  const totalCollecArts = await CollectionArt.countDocuments(queryObject)
+  const numOfCollecPages = Math.ceil(totalCollecArts / limit)
   res.status(StatusCodes.OK).json({
     artsCollec,
-    totalCollecArts: artsCollec.length,
-    numOfCollecPages: 1
+    totalCollecArts,
+    numOfCollecPages,
+    numOfCollecFavorite
   })
 }
 
