@@ -31,6 +31,13 @@ const getAllExhibitionUserArts = async (req, res) => {
 
   let result = ExhibitionArt.find(queryObject)
 
+  //knowing number of all arts by user
+  let resultAllArtsQuery = ExhibitionArt.find({
+    createdBy: req.user.userId
+  })
+  let resultAllArts = await resultAllArtsQuery
+  let numOfAllArts = resultAllArts.length
+
   //knowing number of favorite
   let resultFavoriteQuery = ExhibitionArt.find({ isFavorite: true })
   const resultFavorite = await resultFavoriteQuery
@@ -69,7 +76,7 @@ const getAllExhibitionUserArts = async (req, res) => {
   const numOfPages = Math.ceil(totalArts / limit)
   res
     .status(StatusCodes.OK)
-    .json({ arts, totalArts, numOfPages, numOfExhibFavorite })
+    .json({ arts, totalArts, numOfPages, numOfExhibFavorite, numOfAllArts })
 }
 
 const deleteExhibitionArt = async (req, res) => {

@@ -75,6 +75,13 @@ const getAllCollectionUserArts = async (req, res) => {
 
   let result = CollectionArt.find(queryObject)
 
+  //knowing number of all arts by user
+  let resultAllArtsQuery = CollectionArt.find({
+    createdBy: req.user.userId
+  })
+  let resultAllArts = await resultAllArtsQuery
+  let numOfAllArts = resultAllArts.length
+
   //knowing number of favorite
   let resultFavoriteQuery = CollectionArt.find({ isFavorite: true })
   const resultFavorite = await resultFavoriteQuery
@@ -115,7 +122,8 @@ const getAllCollectionUserArts = async (req, res) => {
     artsCollec,
     totalCollecArts,
     numOfCollecPages,
-    numOfCollecFavorite
+    numOfCollecFavorite,
+    numOfAllArts
   })
 }
 
